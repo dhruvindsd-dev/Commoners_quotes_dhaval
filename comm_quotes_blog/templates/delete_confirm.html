@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="section" style="min-height: 100vh;">
+  {% if article %}
+  <p class="is-size-3 has-text-weight-bold has-text-dark has-text-centered">
+    Are you sure you want to <span class="has-text-danger">DELETE</span>
+  </p>
+  <p class="has-text-centered is-size-4">{{article.0.title}}.</p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" class="is-hidden confirmation" name="confirmation" />
+    <div class="section has-text-centered">
+      <a
+        onclick="document.querySelector('.confirmation').value = 'false'; document.querySelector('form').submit()"
+        class="button is-medium is-outlined is-success"
+        >Cancel</a
+      >
+      <a
+        onclick="document.querySelector('.confirmation').value = 'true'; document.querySelector('form').submit()"
+        class="button is-medium is-outlined is-danger"
+        ><span class="icon"><i class="far fa-trash-alt"></i></span>
+        <span>Confirm</span></a
+      >
+    </div>
+  </form>
+  {% else %}
+  <p class="title has-text-centered has-text-danger">Article does not exist.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

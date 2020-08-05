@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% block content %}
+<div class="section">
+  <div class="container section has-text-centered" style="padding-top: 0px;">
+    <p class="is-size-1 has-text-weight-bold alegreya">Quotes</p>
+    <p class="is-size-5 has-text-centered">
+      Welcome to the quotes page. Here you’ll find short words of wisdom by
+      great people, quotes submitted by readers like you, and some of the most
+      inspiring and famous quotes on the internet. .You can binge the quotes
+      based on the category below. Also, everything published on the site is
+      listed in reverse chronological order. Enjoy !!!
+    </p>
+    <!-- <i class="far fa-thumbs-up"></i> -->
+  </div>
+  <div class="container">
+    <div class="columns is-multiline is-vcentered is-centered">
+      {% for quote in quotes %}
+      <div class="column is-one-quarter">
+        <div
+          class="card has-background-light hover_scale"
+          onclick="set_quote(this)"
+          style="border: 1.5px solid rgba(128, 128, 128, 0.26);"
+        >
+          <div class="card-content">
+            <p class="is-size-4 has-text-weight-bold" id="title">
+              <sup
+                ><span class="icon is-size-5"
+                  ><i class="fas fa-quote-left"></i></span
+              ></sup>
+              {{quote.title}}
+            </p>
+            <p class="is-size-5" id="subtitle" style="opacity: 0.6;">
+              by - {{quote.author}}.
+            </p>
+            <p class="id is-hidden">{{quote.id}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div class="modal quote_display">
+  <div
+    class="modal-background"
+    onclick="this.parentElement.classList.remove('is-active')"
+  ></div>
+  <div class="modal-content notification">
+    <p class="title">This is a dem quote</p>
+    <p class="subtitle">-By escobar</p>
+    {% if authentication %}
+    <a class="button is-link is-outlined quote_edit">Edit </a>
+    {% endif %}
+  </div>
+  <button
+    class="modal-close is-large"
+    onclick="this.parentElement.classList.remove('is-active')"
+    aria-label="close"
+  ></button>
+</div>
+<script>
+  const set_quote = (el) => {
+    const quote_display = document.querySelector(".quote_display");
+    quote_display.querySelector(".title").innerText = el.querySelector(
+      "#title"
+    ).innerText;
+    quote_display.querySelector(".subtitle").innerText = el.querySelector(
+      "#subtitle"
+    ).innerText;
+    quote_display.classList.add("is-active");
+    quote_display.querySelector(".quote_edit").onclick = () => {
+      window.location = `/edit_quote/${el.querySelector(".id").innerText}`;
+    };
+  };
+</script>
+{% endblock %}

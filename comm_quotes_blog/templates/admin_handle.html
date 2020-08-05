@@ -1,0 +1,227 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="section has-text-centered">
+  <p class="alegreya is-size-1 has-text-weight-bold">
+    Commoner's Quotes Handle
+  </p>
+</div>
+<div class="section has-text-centered">
+  <p class="buttons is-centered">
+    <a class="button is-link is-light is-outlined" title="Google analytics">
+      <span class="icon"><i class="fas fa-chart-pie"></i></span
+      ><span>Analytics</span>
+    </a>
+    <a
+      class="button is-link is-light is-outlined"
+      href="user_submitted_articles"
+    >
+      <span class="icon"><i class="far fa-user"></i></span>
+      <span>Latest Submitted Articles</span>
+    </a>
+    <a href="/create_quote" class="button is-link is-light is-outlined"
+      ><span class="icon"><i class="fas fa-plus"></i> </span>
+      <span>New Quote</span></a
+    >
+    <a
+      href="/create_article/stories"
+      class="button is-link is-light is-outlined"
+    >
+      <span class="icon"><i class="fas fa-plus"></i> </span>
+      <span>New Story</span></a
+    >
+    <a href="/create_article/poems" class="button is-link is-light is-outlined">
+      <span class="icon"><i class="fas fa-plus"></i> </span>
+      <span>New Poem</span></a
+    >
+  </p>
+</div>
+<!-- QUOTES -->
+<div class="section">
+  <p class="is-size-2 has-text-centered has-text-weight-semibold alegreya">
+    <span class="title-border">
+      Latest Quotes
+    </span>
+  </p>
+  <br />
+  <div class="columns is-multiline is-vcentered">
+    {% for quote in quotes %}
+    <div class="column is-one-quarter">
+      <div
+        class="card has-background-light hover_scale"
+        style="border: 1.5px solid rgba(128, 128, 128, 0.26);"
+        onclick="set_quote(this)"
+      >
+        <div class="card-content">
+          <p class="title">
+            {{quote.title}}
+          </p>
+          <p class="subtitle" style="opacity: 0.6;">
+            by - {{quote.author}}.
+          </p>
+          <p class="id is-hidden">{{quote.id}}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="has-text-centered">
+    <a href="/quotes" class="button is-link is-light is-outlined is-medium"
+      >All Quotes</a
+    >
+  </p>
+</div>
+<!-- STORIES  -->
+<div class="section">
+  <p class="is-size-2 has-text-centered has-text-weight-semibold alegreya">
+    <span class="title-border">
+      Latest Stories
+    </span>
+  </p>
+  <br />
+  <div class="tile is-ancestor is-vertical">
+    <div class="section">
+      {% for story in stories %}
+      <div
+        class="tile stories_hover_txt"
+        onclick="window.location = 'view_articles/{{story.id}}'"
+      >
+        <div class="tile is-parent is-4">
+          <div class="tile is-child">
+            <div class="columns is-mobile">
+              <div class="column is-5">
+                <figure class="image is-square">
+                  {% if story.img %}
+                  <img src="{{story.img.url}}" alt="" class="is-rounded" />
+                  {% else %}
+                  <img src="{{story.img_link}}" alt="" class="is-rounded" />
+                  {% endif %}
+                </figure>
+              </div>
+              <div class="column">
+                <p class="less_opacity">Date :</p>
+                <p>{{story.created_on}}</p>
+                <br />
+                <p class="less_opacity">Reading Time :</p>
+                <p>{{story.read_time}} minute read</p>
+                <br />
+                <p class="less_opacity">Author :</p>
+                <p>{{story.author}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile is-parent is-8">
+          <div class="tile is-child">
+            <p class="title">
+              {{story.title}}
+            </p>
+            <br class="is-hidden-mobile" />
+            <p class="subtitle">
+              {{story.subtitle | safe}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr />
+      {% endfor %}
+    </div>
+  </div>
+  <p class="has-text-centered">
+    <a href="/stories" class="is-medium button is-link is-light is-outlined"
+      >All Stories</a
+    >
+  </p>
+</div>
+<div class="section">
+  <p class="is-size-2 has-text-centered has-text-weight-semibold alegreya">
+    <span class="title-border">
+      Latest Peoms
+    </span>
+  </p>
+  <br />
+  <div class="tile is-ancestor is-vertical">
+    <div class="section">
+      {% for poem in poems %}
+      <div
+        class="tile stories_hover_txt"
+        onclick="window.location = 'view_articles/{{poem.id}}'"
+      >
+        <div class="tile is-parent is-4">
+          <div class="tile is-child">
+            <div class="columns is-mobile">
+              <div class="column is-5">
+                <figure class="image is-square">
+                  {% if poem.img %}
+                  <img src="{{poem.img.url}}" alt="" class="is-rounded" />
+                  {% else %}
+                  <img src="{{poem.img_link}}" alt="" class="is-rounded" />
+                  {% endif %}
+                </figure>
+              </div>
+              <div class="column">
+                <p class="less_opacity">Date :</p>
+                <p>{{poem.created_on}}</p>
+                <br />
+                <p class="less_opacity">Reading Time :</p>
+                <p>{{poem.read_time}} minute read</p>
+                <br />
+                <p class="less_opacity">Author :</p>
+                <p>{{poem.author}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile is-parent is-8">
+          <div class="tile is-child">
+            <p class="title">
+              {{poem.title}}
+            </p>
+            <br class="is-hidden-mobile" />
+            <p class="subtitle">
+              {{poem.subtitle | safe}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr />
+      {% endfor %}
+    </div>
+  </div>
+  <p class="has-text-centered">
+    <a href="/poems" class="button is-link is-light is-outlined is-medium"
+      >All Poems</a
+    >
+  </p>
+</div>
+<div class="modal quote_display">
+  <div
+    class="modal-background"
+    onclick="this.parentElement.classList.remove('is-active')"
+  ></div>
+  <div class="modal-content notification">
+    <p class="title">This is a dem quote</p>
+    <p class="subtitle">-By escobar</p>
+    <a class="button is-link is-outlined quote_edit">Edit </a>
+  </div>
+  <button
+    class="modal-close is-large"
+    onclick="this.parentElement.classList.remove('is-active')"
+    aria-label="close"
+  ></button>
+</div>
+<script>
+  const set_quote = (el) => {
+    const quote_display = document.querySelector(".quote_display");
+    quote_display.querySelector(".title").innerText = el.querySelector(
+      ".title"
+    ).innerText;
+    quote_display.querySelector(".subtitle").innerText = el.querySelector(
+      ".subtitle"
+    ).innerText;
+    quote_display.classList.add("is-active");
+    quote_display.querySelector(".quote_edit").onclick = () => {
+      window.location = `/edit_quote/${el.querySelector(".id").innerText}`;
+    };
+  };
+</script>
+{% endblock %}

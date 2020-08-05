@@ -1,0 +1,62 @@
+{% extends 'base.html' %} {% block content %}
+<div class="section">
+  <p class="is-size-1 has-text-weight-bold alegreya has-text-centered">
+    Poems
+  </p>
+  <p class="is-size-5 has-text-centered">
+    Some description on the poems page____ Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Sit ab quaerat voluptatum laboriosam quam
+    ipsum veritatis, repudiandae, quas soluta recusandae molestiae, illo
+    sapiente aut laborum facere. Dolorem dolor vero inventore.
+  </p>
+  <br />
+</div>
+<div class="tile is-ancestor is-vertical">
+  <div class="section">
+    {% for poem in poems reversed %}
+    <div
+      class="tile stories_hover_txt"
+      onclick="window.location = 'view_articles/{{poem.id}}'"
+    >
+      <div class="tile is-parent is-4">
+        <div class="tile is-child">
+          <div class="columns is-mobile">
+            <div class="column is-5">
+              <figure class="image is-square">
+                {% if poem.img %}
+                <img src="{{poem.img.url}}" alt="" class="is-rounded" />
+                {% else %}
+                <img src="{{poem.img_link}}" alt="" class="is-rounded" />
+                {% endif %}
+              </figure>
+            </div>
+            <div class="column">
+              <p class="less_opacity">Date :</p>
+              <p>{{poem.created_on}}</p>
+              <br />
+              <p class="less_opacity">Reading Time :</p>
+              <p>{{poem.read_time}}minute read</p>
+              <br />
+              <p class="less_opacity">Author :</p>
+              <p>{{poem.author}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile is-parent is-8">
+        <div class="tile is-child">
+          <p class="title">
+            {{poem.title}}
+          </p>
+          <br class="is-hidden-mobile" />
+          <p class="subtitle">
+            {{poem.subtitle | safe}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

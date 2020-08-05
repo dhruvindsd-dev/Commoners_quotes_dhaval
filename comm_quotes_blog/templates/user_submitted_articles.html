@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="section">
+  <p class="title has-text-centered">
+    User submitted Articles
+  </p>
+</div>
+<div class="section">
+  {% for article in articles reversed %}
+  <div
+    class="notification is-light hover_scale"
+    onclick="modal_toggle(this);"
+    style="border: 1.5px solid rgba(128, 128, 128, 0.26);"
+  >
+    <p class="is-size-4 has-text-weight-bold" id="name">{{article.name}}</p>
+    <p class="is-size-5 less_opacity">{{article.content|slice:':20'}}...</p>
+    <p class="is-hidden" id="content">{{article.content}}</p>
+    <p>
+      <a
+        href="mailto:{{article.email}}"
+        class="has-text-link"
+        style="text-decoration: none;"
+        id="email"
+        >{{article.email}}</a
+      >
+    </p>
+    <a
+      href="tel:{{article.number}}"
+      id="number"
+      class="button is-link is-outlined is-light"
+      >Call: {{article.number}}</a
+    >
+  </div>
+  <div class="modal">
+    <div
+      class="modal-background"
+      onclick="this.parentElement.classList.remove('is-active')"
+    ></div>
+    <div class="modal-content">
+      <div class="box">
+        <p class="is-size-4 has-text-weight-bold" id="name"></p>
+        <p class="is-size-5" id="content"></p>
+        <br />
+        <p><a class="has-text-link" id="email"></a></p>
+        <a class="button is-link is-outlined is-light" id="number"></a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script>
+  function modal_toggle(el) {
+    let notification_element = el;
+    let modal = document.querySelector(".modal-content");
+    //  id's = name, cotent, mail, number
+    //  parent = name, content, mail , number
+    modal.querySelector("#name").innerText = notification_element.querySelector(
+      "#name"
+    ).innerText;
+    modal.querySelector(
+      "#content"
+    ).innerText = notification_element.querySelector("#content").innerText;
+
+    let email = notification_element.querySelector("#email").innerText;
+    modal.querySelector("#email").innerText = email;
+    modal.querySelector("#email").href = `mailto:${email}`;
+    //
+    let number = notification_element
+      .querySelector("#number")
+      .innerText.split(":")[1];
+    modal.querySelector("#number").innerText = `Call: ${number}`;
+    modal.querySelector("#number").href = `tel:${number}`;
+    modal.parentElement.classList.add("is-active");
+  }
+</script>
+{% endblock %}

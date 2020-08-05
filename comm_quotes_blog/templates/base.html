@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commoner's Quotes</title>
+    <link
+      rel="stylesheet"
+      href="/static/css/bulma.min.css?v={random number/string}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <link href="/static/icons/css/all.css" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        width: auto !important;
+        overflow-x: hidden !important;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      .hero1 {
+        background-image: url("static/img/home_hero.jpg");
+        background-position: center;
+        object-fit: center;
+        background-size: cover;
+      }
+      .button {
+        border-width: 2px;
+      }
+      img {
+        object-fit: cover;
+      }
+      .less_opacity {
+        opacity: 0.6;
+      }
+      .stories_hover_txt {
+        transition: 0.2s;
+      }
+      .stories_hover_txt:hover {
+        cursor: pointer;
+        transform: scale(1.03);
+      }
+      .alegreya {
+        font-family: "Alegreya", serif;
+      }
+      .hover_scale {
+        transition: 0.2s;
+      }
+      .hover_scale:hover {
+        transform: scale(1.03);
+        cursor: pointer;
+      }
+      .button {
+        transition: 0.2s;
+      }
+      .title-border {
+        border-bottom: 2px solid rgba(153, 153, 153, 0.74);
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+      }
+      .navbar {
+        z-index: 100;
+        transition: background-color 0.4s, padding 0.4s;
+      }
+      hr {
+        background-color: rgba(114, 114, 114, 0.459);
+      }
+    </style>
+  </head>
+  <body style="font-family: 'Roboto', sans-serif;" class="has-background-light">
+    {% block content %} {% endblock %}
+  </body>
+  <script>
+    console.log("test");
+    window.addEventListener("DOMContentLoaded", (event) => {
+      let btns = [...document.querySelectorAll(".button")];
+      btns.map((item) => {
+        console.log(item);
+        item.addEventListener("click", () => {
+          item.classList.add("is-loading");
+        });
+      });
+    });
+  </script>
+</html>

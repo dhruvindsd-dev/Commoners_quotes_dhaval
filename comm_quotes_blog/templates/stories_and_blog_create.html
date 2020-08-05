@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Your blog</title>
+    <link rel="stylesheet" href="/static/icons/css/all.css" />
+    <link
+      rel="stylesheet"
+      href="/static/css/bulma.min.css?v={random nyumber/string}"
+    />
+    <link href="/static/quil/main.css" rel="stylesheet" />
+    <script src="/static/quil/main.js"></script>
+    <style>
+      .ql-toolbar {
+        border: 2px solid rgba(0, 0, 0, 0.534) !important;
+        border-radius: 5px 5px 0px 0px;
+        z-index: 10;
+        width: 100%;
+        background-color: rgb(216, 216, 216);
+      }
+      button {
+        transition: 0.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section">
+      <form onsubmit="event.preventDefault(); form_handle(this)" method="POST">
+        {% csrf_token %}
+        <div class="field">
+          <label class="label is-medium">Title</label>
+          <div class="control">
+            <input
+              name="title"
+              class="input"
+              type="text"
+              placeholder="main blog title * "
+              style="border: 2px solid rgba(0, 0, 0, 0.534);"
+              value="{{article.title}}"
+            />
+          </div>
+        </div>
+        <br />
+        <div class="field">
+          <label class="label is-medium">Description </label>
+          <div class="control">
+            <input
+              name="description"
+              type="text"
+              class="input"
+              placeholder="a short description (not more than 30 words)*"
+              maxlength="240"
+              style="border: 2px solid rgba(0, 0, 0, 0.534);"
+              value="{{article.subtitle}}"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="checkbox">
+            {% if article.featured %}
+            <input type="checkbox" class="checkbox" name="featured" checked />
+
+            {% else %}
+            <input type="checkbox" class="checkbox" name="featured" />
+
+            {% endif %}
+
+            <span class="has-size-3"
+              >Features
+              <span class="less-opacity">(show in home page)</span></span
+            >
+          </label>
+        </div>
+        <br />
+        <div class="field">
+          <label class="label is-medium">Content</label>
+          <div class="control">
+            <input
+              name="content"
+              type="text"
+              style="display: none;"
+              class="blog-content"
+            />
+            <input type="text" class="is-hidden read_time" name="read_time" />
+            <div
+              class="has-text-dark"
+              id="editor"
+              style="
+                border: 2px solid rgba(0, 0, 0, 0.534);
+                font-size: 1rem;
+                border-radius: 0 0 5px 5px;
+                border-top: none;
+                padding: 10px;
+              "
+            >
+              {{article.content|safe}}
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label is-medium">Author Name</label>
+          <div class="control">
+            <input
+              value="{{article.author}}"
+              name="author"
+              class="input"
+              type="text"
+              placeholder="main blog title * "
+              style="border: 2px solid rgba(0, 0, 0, 0.534);"
+            />
+          </div>
+        </div>
+        <br />
+        <div class="field">
+          <input
+            type="text"
+            value="{{catagory}}"
+            style="display: none;"
+            name="catagory"
+          />
+          {% if type == 'Save changes' %}
+          <input
+            type="text"
+            class="is-hidden img_redirect"
+            value="false"
+            name="img_redirect"
+          />
+          <button
+            class="button is-link is-outlined"
+            onclick="document.querySelector('.img_redirect').value = 'true'"
+          >
+            <span class="icon"><i class="fas fa-image"></i></span
+            ><span>Save the changes made and edit image</span>
+          </button>
+          <br />
+          <br />
+          {% endif %}
+          <button class="button is-link is-outlined">{{type}}</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      var toolbarOptions = [
+        ["bold", "italic"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ color: [] }, { background: [] }],
+        ["blockquote"],
+        ["link"],
+      ];
+
+      var quill = new Quill("#editor", {
+        modules: {
+          toolbar: toolbarOptions,
+        },
+        theme: "snow",
+        format: {},
+      });
+      const form_handle = (el) => {
+        document.querySelector(".blog-content").value = quill.root.innerHTML;
+        let time =
+          document.querySelector("body").innerText.split(" ").length / 225;
+        if (time % 1 > 0.5) {
+          time = Math.floor(time) + 1;
+        } else {
+          time = Math.floor(time);
+        }
+        document.querySelector(".read_time").value = time;
+        el.submit();
+      };
+
+      var startProductBarPos = -1;
+      window.onscroll = function () {
+        var bar = document.querySelector(".ql-toolbar");
+        if (startProductBarPos < 0) startProductBarPos = findPosY(bar);
+
+        if (pageYOffset > startProductBarPos) {
+          bar.style.position = "fixed";
+          bar.style.top = "5px";
+          bar.style.width = bar.parentElement.offsetWidth + "px";
+          bar.style.padding.top = "70px";
+          bar.parentElement.style.minHeight = "100vh";
+        } else {
+          bar.style.position = "relative";
+          bar.parentElement.style.minHeight = "0vh";
+        }
+      };
+
+      function findPosY(obj) {
+        var curtop = 0;
+        if (typeof obj.offsetParent != "undefined" && obj.offsetParent) {
+          while (obj.offsetParent) {
+            curtop += obj.offsetTop;
+            obj = obj.offsetParent;
+          }
+          curtop += obj.offsetTop;
+        } else if (obj.y) curtop += obj.y;
+        return curtop;
+      }
+    </script>
+  </body>
+</html>

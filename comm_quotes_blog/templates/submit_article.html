@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block content %}
+<div
+  class="section"
+  style="
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "
+>
+  <div class="columns is-centered">
+    <div class="column">
+      <p class="title has-text-centered">
+        <sup
+          ><span class="icon is-size-5"
+            ><i class="fas fa-quote-left"></i></span></sup
+        ><span>Commoner's Quotes</span>
+      </p>
+      <p class="is-size-4 has-text-weight-bold has-text-centered">
+        Enter your email to verify yourself and submit your article.
+      </p>
+      <br />
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label class="label">Enter Your Email</label>
+          <div class="control">
+            <input
+              type="email"
+              required
+              class="input"
+              name="email"
+              placeholder="Enter your e-mail"
+            />
+          </div>
+        </div>
+        <button class="button is-link is-outlined">
+          Get OPT
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

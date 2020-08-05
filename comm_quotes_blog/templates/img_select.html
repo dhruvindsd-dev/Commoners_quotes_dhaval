@@ -1,0 +1,227 @@
+{% extends 'base.html' %} {% block content %}
+<div class="section" style="padding-bottom: 0px;">
+  <form method="post" enctype="multipart/form-data" class="img_form">
+    {% csrf_token %}
+    <div class="file has-name is-fullwidth">
+      <label class="file-label">
+        <input
+          class="file-input"
+          type="file"
+          accept="image/*"
+          name="img"
+          onchange="this.parentElement.querySelector('.file-name').innerText = this.files[0].name"
+        />
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-upload"></i>
+          </span>
+          <span class="file-label">
+            Choose a file…
+          </span>
+        </span>
+        <span class="file-name">
+          No file chosen
+        </span>
+      </label>
+    </div>
+    <br />
+    <p class="has-text-centered">
+      <button type="submit" class="button is-link is-outlined">Upload</button>
+    </p>
+    <input type="text" class="input is-hidden img_link" name="img_link" />
+  </form>
+  <br />
+  <p class="has-text-centered is-size-2 has-text-weight-bold">
+    <span class="title-border">Or</span>
+  </p>
+</div>
+<div class="section" style="padding-top: 0px;">
+  <div class="columns is-centered main_img_container">
+    <div class="column is-half">
+      <div class="section has-text-centered">
+        <p class="is-size-2 is-size-4-mobile">
+          Search a image for your blog.
+        </p>
+        <br />
+        <div
+          class="field has-addons is-horizontal"
+          style="justify-content: center;"
+        >
+          <div class="control">
+            <input class="input myInput" type="text" placeholder="Text input" />
+          </div>
+          <div class="control">
+            <a class="button magenta_btn" onclick="set_images()">
+              <span class="icon"><i class="fas fa-search"></i></span>
+              <span>Search</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="section img_section_parent" style="padding-top: 0; display: none;">
+  <div class="section error" style="display: none;">
+    <p class="is-size-4 is-size-6-mobile has-text-centered has-text-danger">
+      Try Searching Something Else
+    </p>
+  </div>
+  <style>
+    figure {
+      margin: 5px 3px 5px 5px;
+    }
+  </style>
+  <div class="columns is-gapless img_section">
+    <div class="column">
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-0" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-4" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-8" />
+      </figure>
+    </div>
+    <div class="column">
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-1" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-5" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-9" />
+      </figure>
+    </div>
+    <div class="column">
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-2" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-6" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-10" />
+      </figure>
+    </div>
+    <div class="column">
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-3" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-7" />
+      </figure>
+      <figure class="image is-5by3 margin-7">
+        <img class="grid-hover zoom" id="img-11" />
+      </figure>
+    </div>
+  </div>
+  <div class="section has-text-centered loading_section" style="display: none;">
+    <span class="icon is-large"
+      ><i class="fas fa-spinner fa-pulse fa-5x"></i
+    ></span>
+  </div>
+  <p class="buttons is-centered">
+    <button class="button is-dark prev_btn" onclick="prev_page()" disabled>
+      <span class="icon is-large"><i class="fas fa-chevron-left"></i></span>
+    </button>
+    <button class="button is-dark next_btn" onclick="next_page()" disabled>
+      <span class="icon"><i class="fas fa-chevron-right"></i></span>
+    </button>
+  </p>
+</div>
+
+<script>
+  var page_counter = 1;
+  var data = {};
+  var total_pages = 0;
+  const set_images = () => {
+    let querysearch = document.querySelector(".myInput").value;
+    document.querySelector(".img_section_parent").style.display = "block";
+    let img_section = document.querySelector(".img_section");
+    let loading_section = document.querySelector(".loading_section");
+    img_section.style.display = "none";
+    loading_section.style.display = "block";
+    fetch(
+      `https://api.unsplash.com/search/photos?query=${querysearch}&orientation=landscape&per_page=12&page=${page_counter}&client_id=11f2ff5a50fcce4df43aa4c897d132d3f5ad4a84ed0aec7be67718deb5120192`
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.results.length == 0) {
+          document.querySelector(".prev_btn").disabled = true;
+          document.querySelector(".next_btn").disabled = true;
+          document.querySelector(".error").style.display = "block";
+          loading_section.style.display = "none";
+          img_section.style.display = "none";
+        } else {
+          document.querySelector(".error").style.display = "none";
+          // document.getElementById("error").innerHTML = "";
+          results = data.results;
+          total_pages = data.total_pages;
+          urls = [];
+          results.map((item) => {
+            urls.push(item.urls.small);
+          });
+          const img_containers = document.querySelectorAll(".zoom");
+          [...img_containers].map((item) => {
+            item.parentElement.style.display = "none";
+          });
+          urls.map((url, index) => {
+            [...img_containers].map((item) => {
+              if (item.id.split("-")[1] == index) {
+                item.src = url;
+                item.addEventListener("click", () => {
+                  console.log(item.src);
+                  document.querySelector(".img_link").value = item.src.replace(
+                    "400",
+                    "600"
+                    );
+                  document.querySelector(".img_form").submit();
+                  // location.href = `/img_save/{{id}}/${item.src}`;
+                });
+
+                item.parentElement.style.display = "";
+              }
+            });
+          });
+          console.log(urls);
+
+          document.querySelector(
+            `#img-${urls.length - 1}`
+          ).onload = function () {
+            loading_section.style.display = "none";
+            img_section.style.display = "";
+          };
+          if (page_counter < total_pages) {
+            document.querySelector(".next_btn").disabled = false;
+          }
+        }
+      });
+  };
+  const next_page = () => {
+    if (page_counter == total_pages) {
+      document.querySelector(".next_btn").disabled = true;
+    } else {
+      page_counter = page_counter + 1;
+      set_images();
+    }
+    if (page_counter > 1) {
+      document.querySelector(".prev_btn").disabled = false;
+    }
+  };
+  const prev_page = () => {
+    if (page_counter == 1) {
+      document.querySelector(".prev_btn").disabled = true;
+    } else {
+      page_counter = page_counter - 1;
+      set_images();
+    }
+    if (page_counter < total_pages) {
+      document.querySelector(".next_btn").disabled = false;
+    }
+  };
+</script>
+
+{% endblock %}

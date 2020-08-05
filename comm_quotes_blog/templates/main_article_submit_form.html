@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="section">
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <p class="is-size-3 has-text-weight-bold">
+        One last step before your article reaches hundreds of people.
+      </p>
+      <br />
+      <form method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label class="label">Your Name</label>
+          <div class="control">
+            <input required type="text" class="input" name="name" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Your Number</label>
+          <div class="control">
+            <input required type="number" class="input" name="number" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Your email</label>
+          <div class="control">
+            <input required type="email" class="input" name="email" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Your main article</label>
+          <div class="control">
+            <textarea
+              required
+              name="article"
+              class="textarea"
+              placeholder="Enter your main content here"
+            ></textarea>
+          </div>
+        </div>
+        <button class="button is-link is-outlined">Submit Article</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

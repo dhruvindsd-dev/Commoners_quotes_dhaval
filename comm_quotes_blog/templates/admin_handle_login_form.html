@@ -1,0 +1,90 @@
+{% extends 'base.html' %} {% block content %}
+<div class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5">
+          <form
+            method="post"
+            class="login_form"
+            onsubmit="event.preventDefault(); form_submit(); "
+          >
+            {% csrf_token %}
+            <div class="field">
+              <label class="label is-size-4">Username</label>
+              <div class="control">
+                <input
+                  name="username"
+                  type="text"
+                  class="input username_input"
+                  required
+                  placeholder="enter your username"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label is-size-4">Password</label>
+              <div class="control">
+                <input
+                  type="password"
+                  name="password"
+                  class="input password_input"
+                  required
+                  placeholder="enter your password"
+                />
+              </div>
+            </div>
+            <input
+              type="text"
+              class="token_input"
+              style="display: none;"
+              name="token"
+            />
+            <div class="control">
+              <p class="has-text-danger is-size-4 invalid_details">
+                {{err}}
+              </p>
+              <p
+                class="has-text-dange is-size-6 notification_err"
+                style="display: none; margin: 10px;"
+              ></p>
+            </div>
+            <div class="control">
+              <button class="button login_btn is-link is-outlined">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // auto login from local storage
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.querySelector(".invalid_details").innerText == "") {
+      if (localStorage.admin_username && localStorage.admin_password) {
+        document.querySelector(".login_btn").classList.add("is-loading");
+        //  get input boxs fill the data and submit the godamn form
+        document.querySelector(".username_input").value =
+          localStorage.admin_username;
+        document.querySelector(".password_input").value =
+          localStorage.admin_password;
+        form_submit();
+      }
+    }
+  });
+  const form_submit = () => {
+    // check for notification permission if permission denied do not let the form be submittted.
+    localStorage.admin_username = document.querySelector(
+      ".username_input"
+    ).value;
+    localStorage.admin_password = document.querySelector(
+      ".password_input"
+    ).value;
+
+    document.querySelector(".login_form").submit();
+  };
+</script>
+{% endblock %}
